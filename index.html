@@ -1,0 +1,230 @@
+<!doctype html>
+<html lang="en"> 
+ <head></head> 
+ <body> 
+  <h1> Hello </h1> 
+  <div>
+    This is a html example from Dcoder, 
+   <br> have fun. :) 
+  </div> 
+  <meta charset="UTF-8"> 
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"> 
+  <title>If You Remember</title> 
+  <style>
+    body {
+      font-family: 'Poppins', sans-serif;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      min-height: 100vh;
+      margin: 0;
+      background-color: #f0f0f0;
+      transition: background-color 0.5s;
+    }
+
+    .container {
+      text-align: center;
+      background-color: #fff;
+      padding: 2rem;
+      border-radius: 10px;
+      box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+      max-width: 800px;
+      width: 90%;
+      margin: 20px;
+    }
+
+    h1 {
+      font-size: 1.8rem;
+      color: #2c3e50;
+      margin-bottom: 1.5rem;
+      font-weight: 600;
+    }
+
+    .input-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 1rem;
+      margin-bottom: 1.5rem;
+    }
+
+    .input-group {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    label {
+      font-weight: 400;
+      font-size: 1rem;
+      color: #34495e;
+      margin-bottom: 5px;
+    }
+
+    input {
+      padding: 0.7rem;
+      width: 100%;
+      max-width: 120px;
+      border: 2px solid #f39c12;
+      border-radius: 5px;
+      font-size: 1rem;
+      text-align: center;
+      color: #2c3e50;
+      background-color: #fef5e5;
+    }
+
+    button {
+      padding: 0.8rem 1.5rem;
+      font-size: 1rem;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      background-color: #3498db;
+      color: white;
+      transition: all 0.3s;
+      font-weight: 600;
+      margin: 0.5rem;
+    }
+
+    button:hover {
+      background-color: #2980b9;
+    }
+
+    #counter {
+      font-size: 1.5rem;
+      margin: 1.5rem 0;
+      color: #e74c3c;
+      font-weight: 600;
+      padding: 1rem;
+      border-radius: 5px;
+      background-color: rgba(241, 196, 15, 0.1);
+    }
+
+    /* Night Mode Styles */
+    .night-mode {
+      background-color: #2c3e50;
+      color: #ecf0f1;
+    }
+
+    .night-mode .container {
+      background-color: #34495e;
+    }
+
+    .night-mode label {
+      color: #bdc3c7;
+    }
+
+    .night-mode input {
+      background-color: #2c3e50;
+      border-color: #f39c12;
+      color: #ecf0f1;
+    }
+
+    .night-mode #counter {
+      color: #f39c12;
+      background-color: rgba(243, 156, 18, 0.1);
+    }
+
+    @media (max-width: 600px) {
+      .input-grid {
+        grid-template-columns: repeat(2, 1fr);
+      }
+      
+      input {
+        max-width: none;
+      }
+    }
+  </style> 
+  <div class="container"> 
+   <h1>If You Remember</h1> 
+   <div class="input-grid"> 
+    <div class="input-group"> <label>Start Year</label> 
+     <input type="number" id="startYear" min="1900" placeholder="YYYY"> 
+    </div> 
+    <div class="input-group"> <label>Start Month</label> 
+     <input type="number" id="startMonth" min="1" max="12" placeholder="MM"> 
+    </div> 
+    <div class="input-group"> <label>Start Day</label> 
+     <input type="number" id="startDay" min="1" max="31" placeholder="DD"> 
+    </div> 
+    <div class="input-group"> <label>Hours</label> 
+     <input type="number" id="startHours" min="0" max="23" placeholder="HH"> 
+    </div> 
+    <div class="input-group"> <label>Minutes</label> 
+     <input type="number" id="startMinutes" min="0" max="59" placeholder="MM"> 
+    </div> 
+    <div class="input-group"> <label>Seconds</label> 
+     <input type="number" id="startSeconds" min="0" max="59" placeholder="SS"> 
+    </div> 
+   </div> 
+   <div class="button-group"> <button onclick="startCounter()">Start Counter</button> <button onclick="toggleNightMode()">Toggle Night Mode</button> 
+   </div> 
+   <div id="counter">
+     Result will appear here 
+   </div> 
+  </div> 
+  <script>
+    let intervalId = null;
+    let startDate = null;
+
+    function calculateDuration(start, end) {
+      let diff = end - start;
+
+      let totalSeconds = Math.floor(diff / 1000);
+      let totalMinutes = Math.floor(totalSeconds / 60);
+      let totalHours = Math.floor(totalMinutes / 60);
+      let totalDays = Math.floor(totalHours / 24);
+
+      let years = Math.floor(totalDays / 365);
+      let days = totalDays % 365;
+      let hours = totalHours % 24;
+      let minutes = totalMinutes % 60;
+      let seconds = totalSeconds % 60;
+
+      return { years, days, hours, minutes, seconds };
+    }
+
+    function startCounter() {
+      const year = parseInt(document.getElementById('startYear').value);
+      const month = parseInt(document.getElementById('startMonth').value) - 1;
+      const day = parseInt(document.getElementById('startDay').value);
+      const hours = parseInt(document.getElementById('startHours').value);
+      const minutes = parseInt(document.getElementById('startMinutes').value);
+      const seconds = parseInt(document.getElementById('startSeconds').value);
+
+      if (isNaN(year) || isNaN(month) || isNaN(day) || 
+          isNaN(hours) || isNaN(minutes) || isNaN(seconds)) {
+        alert("Please enter valid date and time values.");
+        return;
+      }
+
+      startDate = new Date(year, month, day, hours, minutes, seconds);
+
+      if (startDate > new Date()) {
+        alert("Start time cannot be in the future!");
+        return;
+      }
+
+      updateCounter();
+      if (intervalId) clearInterval(intervalId);
+      intervalId = setInterval(updateCounter, 1000);
+    }
+
+    function updateCounter() {
+      const now = new Date();
+      const duration = calculateDuration(startDate, now);
+
+      let result = `${duration.days} Days, ${duration.hours}h ${duration.minutes}m ${duration.seconds}s`;
+      if (duration.years > 0) {
+        result = `${duration.years} Years, ` + result;
+      }
+
+      document.getElementById('counter').innerHTML = result;
+    }
+
+    function toggleNightMode() {
+      document.body.classList.toggle('night-mode');
+    }
+  </script> 
+ 
+</body></html>
